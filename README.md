@@ -31,6 +31,8 @@ De map moet eerst via HTTPS op een website worden geplaatst. Open die URL daarna
 
 ## Nieuwe starterwoorden toevoegen
 
-De ingebouwde lijst staat in `vocabulary.js`. Eigen woorden die via het scherm **Toevoegen** worden geïmporteerd, worden lokaal op het apparaat bewaard.
+De ingebouwde lijst staat in `vocabulary.js`. Eigen woorden die via het scherm **Toevoegen** worden geïmporteerd, worden lokaal op het apparaat bewaard. Een volledig CSV-bestand kan aparte lijsten, woordsoorten, voorbeelden, meervouden en werkwoordsvormen bevatten. Gebruik hiervoor deze kolommen:
+
+`collection;level;category;type;dutch;english;persian;example;plural;presentIk;presentHij;pastSingular;pastPlural;participle;auxiliary`
 
 Een volgende versie kan een uitgebreid importschema toevoegen voor LINK+, inclusief werkwoordsvormen, thema's en taken.
