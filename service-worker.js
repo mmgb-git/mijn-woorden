@@ -1,4 +1,4 @@
-const CACHE = 'mijn-woorden-v2';
+const CACHE = 'mijn-woorden-v4';
 const ASSETS = ['./','index.html','styles.css','app.js','vocabulary.js','manifest.webmanifest','icons/icon.svg','icons/icon-192.png','icons/icon-512.png'];
 self.addEventListener('install', event => event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(ASSETS))));
 self.addEventListener('activate', event => event.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(key => key !== CACHE).map(key => caches.delete(key))))));

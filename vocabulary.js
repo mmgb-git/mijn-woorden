@@ -212,4 +212,38 @@ Gevolg|other|zodoende|thus / in this way|بدین ترتیب|Hij oefende dagelij
 Vergelijken|other|zowel ... als|both ... and|هم ... و هم|De cursus behandelt zowel spreken als schrijven.
 `);
 
-const STARTER_VOCABULARY = [...B1, ...B2];
+const extraB2Rows = block => block.trim().split('\n').map((line, index) => {
+  const p = line.split('|');
+  const word = {
+    id:`b2-extra-${index + 1}`, level:'B2', category:p[0], type:p[1], dutch:p[2],
+    english:p[3], persian:p[4], example:p[5], pronunciation:p[6], stress:p[7]
+  };
+  if (word.type === 'noun') word.plural = p[8];
+  if (word.type === 'verb') Object.assign(word, {presentIk:p[8],presentHij:p[9],pastSingular:p[10],pastPlural:p[11],participle:p[12],auxiliary:p[13]});
+  return word;
+});
+
+const EXTRA_B2 = extraB2Rows(`
+Emoties en communicatie|verb|benadrukken|to emphasize|تأکید کردن|Ik wil benadrukken dat goede communicatie belangrijk is.|/bəˈnadrʏkə(n)/|be-na-DRUK-ken|benadruk|benadrukt|benadrukte|benadrukten|benadrukt|hebben
+Emoties en communicatie|noun|de behoefte|need|نیاز|Na een lange dag heb ik behoefte aan rust.|/bəˈhuftə/|be-HOEF-te|behoeften
+Emoties en communicatie|verb|aanvaarden|to accept|پذیرفتن|Zij kon de situatie uiteindelijk aanvaarden.|/aːɱˈvaːrdə(n)/|aan-VAAR-den|aanvaard|aanvaardt|aanvaardde|aanvaardden|aanvaard|hebben
+Emoties en communicatie|verb|verliezen|to lose|از دست دادن / باختن|Hij is bang om zijn baan te verliezen.|/vərˈlizə(n)/|ver-LIE-zen|verlies|verliest|verloor|verloren|verloren|hebben
+Emoties en communicatie|noun|de dierbare|loved one|عزیز / فرد محبوب|Na het verlies van een dierbare heeft iemand vaak steun nodig.|/ˈdirbarə/|DIER-ba-re|dierbaren
+Emoties en communicatie|verb|gunnen|to wish someone something good|خوشحال بودن از اینکه دیگری چیزی خوب دارد|Ik gun je deze mooie kans.|/ˈɣʏnə(n)/|GUN-nen|gun|gunt|gunde|gunden|gegund|hebben
+Emoties en communicatie|verb|ontkennen|to deny|انکار کردن|Hij ontkent dat hij de afspraak is vergeten.|/ɔntˈkɛnə(n)/|ont-KEN-nen|ontken|ontkent|ontkende|ontkenden|ontkend|hebben
+Emoties en communicatie|verb|betreffen|to concern / relate to|مربوط بودن به|De nieuwe regels betreffen alle medewerkers.|/bəˈtrɛfə(n)/|be-TREF-fen|betref|betreft|betrof|betroffen|betroffen|hebben
+Emoties en communicatie|noun|de vergissing|mistake|اشتباه|Ik heb je bericht door een vergissing verwijderd.|/vərˈɣɪsɪŋ/|ver-GIS-sing|vergissingen
+Emoties en communicatie|noun|de lichaamstaal|body language|زبان بدن|Haar lichaamstaal laat zien dat ze onzeker is.|/ˈlɪxamstaːl/|LI-chaams-taal|
+Emoties en communicatie|noun|de intonatie|intonation|آهنگ صدا / لحن|Door zijn intonatie klonk de opmerking vriendelijk.|/ˌɪntoˈnaːtsi/|in-to-NA-tie|intonaties
+Emoties en communicatie|noun|de bezorgdheid|concern / worry|نگرانی|Er is veel bezorgdheid over de gezondheid van het kind.|/bəˈzɔrxtɦɛit/|be-ZORGD-heid|bezorgdheden
+Emoties en communicatie|noun|het enthousiasme|enthusiasm|اشتیاق|Ze vertelde met veel enthousiasme over haar nieuwe werk.|/ˌɛntuˈʒɑsmə/|en-thou-si-AS-me|
+Emoties en communicatie|noun|de geruststelling|reassurance|اطمینان‌بخشی / دلگرمی|De woorden van de arts waren een geruststelling.|/ɣəˈrʏstˌstɛlɪŋ/|ge-RUST-stel-ling|geruststellingen
+Emoties en communicatie|noun|de opluchting|relief|آسودگی خاطر|Tot mijn opluchting was de uitslag goed.|/ˈɔplʏxtɪŋ/|OP-luch-ting|opluchtingen
+Emoties en communicatie|noun|de somberheid|gloom / sadness|غمگینی / اندوه|In zijn stem klonk veel somberheid.|/ˈsɔmbərɦɛit/|SOM-ber-heid|
+Emoties en communicatie|noun|de teleurstelling|disappointment|ناامیدی / سرخوردگی|De afwijzing was een grote teleurstelling.|/təˈlørˌstɛlɪŋ/|te-LEUR-stel-ling|teleurstellingen
+Emoties en communicatie|noun|de terughoudendheid|reserve / reluctance|ملاحظه‌کاری / تردید|Ze reageerde met enige terughoudendheid op het voorstel.|/təˈrʏxˌɦʌudəntɦɛit/|te-RUG-hou-dend-heid|
+Emoties en communicatie|noun|de troost|comfort / consolation|تسلی / دلداری|Zijn vrienden boden hem troost in een moeilijke tijd.|/trost/|TROOST|
+Emoties en communicatie|noun|de verbazing|surprise / amazement|تعجب / شگفتی|Tot haar verbazing kende iedereen haar naam.|/vərˈbazɪŋ/|ver-BA-zing|
+`);
+
+const STARTER_VOCABULARY = [...B1, ...B2, ...EXTRA_B2];

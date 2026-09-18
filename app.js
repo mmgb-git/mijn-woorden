@@ -25,6 +25,26 @@ const saveProgress = () => localStorage.setItem(STORAGE_PROGRESS, JSON.stringify
 const saveCustom = () => localStorage.setItem(STORAGE_CUSTOM, JSON.stringify(customWords));
 const escapeHtml = value => String(value ?? '').replace(/[&<>'"]/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[char]));
 
+function migrateTheme2PersonalWordsToB2() {
+  if (typeof EXTRA_B2 === 'undefined') return;
+  const builtIn = new Map(EXTRA_B2.map(word => [word.dutch.toLocaleLowerCase('nl'), word]));
+  let changed = false;
+  customWords = customWords.filter(word => {
+    if (word.collection !== 'Thema 2 - Nieuwe woorden') return true;
+    const replacement = builtIn.get(word.dutch.toLocaleLowerCase('nl'));
+    if (!replacement) return true;
+    const previous = progress[word.id];
+    if (previous && (!progress[replacement.id] || (previous.updated || 0) > (progress[replacement.id].updated || 0))) {
+      progress[replacement.id] = previous;
+    }
+    delete progress[word.id];
+    changed = true;
+    return false;
+  });
+  if (changed) { saveCustom(); saveProgress(); }
+}
+migrateTheme2PersonalWordsToB2();
+
 function setRoute(next, options = {}) {
   route = next;
   if (options.level) selectedLevel = options.level;
@@ -129,13 +149,15 @@ function startPractice(mode, level, collection = null) {
   selectedCollection = collection;
   let pool = levelWords(level);
   if (collection) pool = pool.filter(word => (word.collection || word.category) === collection);
-  pool = dueWords(pool);
+  // A selected theme is a complete review session: include every word in it,
+  // even when some words are not yet due in spaced repetition.
+  if (!collection) pool = dueWords(pool);
   if (mode === 'verbs') pool = pool.filter(word => word.type === 'verb');
   if (mode === 'difficult') {
     const difficult = pool.filter(word => (progress[word.id]?.lastRating || 0) <= 1 && progress[word.id]?.seen);
     pool = difficult.length ? difficult : pool;
   }
-  const max = mode === 'mixed' ? 10 : 15;
+  const max = collection ? pool.length : (mode === 'mixed' ? 10 : 15);
   practice = { mode, collection, index: 0, words: shuffle(pool).slice(0, max), revealed: false, sessionRatings: [] };
   setRoute('practice');
 }
@@ -169,6 +191,7 @@ function renderPractice() {
       <article class="flashcard">
         <div class="prompt">${escapeHtml(isVerbMode ? prompt.label : 'Wat betekent dit?')}</div>
         <div class="word">${escapeHtml(word.dutch)}</div>
+        ${(word.pronunciation || word.stress) ? `<div class="pronunciation">${word.pronunciation ? `<span><strong>IPA:</strong> ${escapeHtml(word.pronunciation)}</span>` : ''}${word.stress ? `<span><strong>Klemtoon:</strong> ${escapeHtml(word.stress)}</span>` : ''}</div>` : ''}
         ${!practice.revealed ? `<div class="hint">Denk eerst na en toon daarna het antwoord.</div><button id="reveal" class="reveal-button">Toon het antwoord</button>` : `
           <div class="answer">
             <div class="translation">${escapeHtml(mainAnswer)}</div>
@@ -216,8 +239,8 @@ function renderWords() {
     const query = app.querySelector('#search').value.trim().toLocaleLowerCase('nl');
     const level = app.querySelector('#levelFilter').value;
     const type = app.querySelector('#typeFilter').value;
-    const filtered = allWords().filter(word => (level === 'ALL' || word.level === level) && (type === 'ALL' || (type === 'other' ? !['verb','noun'].includes(word.type) : word.type === type)) && [word.dutch,word.english,word.persian].join(' ').toLocaleLowerCase('nl').includes(query));
-    app.querySelector('#wordList').innerHTML = filtered.length ? filtered.map(word => `<div class="word-row"><div><strong>${escapeHtml(word.dutch)}</strong><small>${escapeHtml(word.english)} · <span class="fa" lang="fa">${escapeHtml(word.persian)}</span></small></div><div><span class="pill ${word.level.toLowerCase()}">${word.level}</span>${word.type === 'verb' ? ' <span class="pill verb">ww</span>' : ''}</div></div>`).join('') : `<div class="empty">Geen woorden gevonden.</div>`;
+    const filtered = allWords().filter(word => (level === 'ALL' || word.level === level) && (type === 'ALL' || (type === 'other' ? !['verb','noun'].includes(word.type) : word.type === type)) && [word.dutch,word.english,word.persian,word.pronunciation,word.stress].join(' ').toLocaleLowerCase('nl').includes(query));
+    app.querySelector('#wordList').innerHTML = filtered.length ? filtered.map(word => `<div class="word-row"><div><strong>${escapeHtml(word.dutch)}</strong>${(word.pronunciation || word.stress) ? `<small class="word-pronunciation">${escapeHtml(word.pronunciation || word.stress)}</small>` : ''}<small>${escapeHtml(word.english)} · <span class="fa" lang="fa">${escapeHtml(word.persian)}</span></small></div><div><span class="pill ${word.level.toLowerCase()}">${word.level}</span>${word.type === 'verb' ? ' <span class="pill verb">ww</span>' : ''}</div></div>`).join('') : `<div class="empty">Geen woorden gevonden.</div>`;
   };
   ['search','levelFilter','typeFilter'].forEach(id => app.querySelector(`#${id}`).addEventListener('input', update)); update();
 }
@@ -242,7 +265,7 @@ function renderImport() {
     <section class="panel form-grid">
       <label>CSV-bestand<input id="importFile" class="field" type="file" accept=".csv,text/csv"></label>
       <button id="importCsv" class="primary">Importeer CSV-bestand</button>
-      <div class="notice"><strong>Volledige CSV</strong><br>Bewaar thema, woordsoort, voorbeeld, meervoud en alle werkwoordsvormen.</div>
+      <div class="notice"><strong>Volledige CSV</strong><br>Bewaar thema, uitspraak, woordsoort, voorbeeld, meervoud en alle werkwoordsvormen.</div>
       <div class="notice"><strong>Voorbeeld</strong><br>de afspraak; appointment; قرار ملاقات<br>overtuigen; to convince; متقاعد کردن</div>
       <label>Niveau<select id="importLevel"><option>B1</option><option>B2</option></select></label>
       <label>Categorie<input id="importCategory" class="field" value="Eigen lijst"></label>
@@ -280,6 +303,7 @@ async function importCsvFile() {
     id: `custom-${stamp}-${index}`, collection: row.collection || row.category || 'Eigen lijst',
     level: row.level || 'B1', category: row.category || row.collection || 'Eigen lijst', type: row.type || 'other',
     dutch: row.dutch, english: row.english || '', persian: row.persian || '', example: row.example || '', plural: row.plural || '',
+    pronunciation: row.pronunciation || '', stress: row.stress || '',
     presentIk: row.presentIk || '', presentHij: row.presentHij || '', pastSingular: row.pastSingular || '', pastPlural: row.pastPlural || '',
     participle: row.participle || '', auxiliary: row.auxiliary || ''
   }));

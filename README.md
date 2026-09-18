@@ -1,5 +1,18 @@
 # Mijn Woorden
 
+## Version 3 update
+
+- A selected theme now reviews all words in that theme, rather than a maximum of 15.
+- CSV imports can include `pronunciation` (IPA) and `stress` fields.
+- Pronunciation appears on flashcards and in the word list without requiring audio.
+
+## Version 4 update
+
+- Twenty personal words are included directly in B2 Gevorderde woorden.
+- Thema 2 Taak 1, Taak 2 and Taak 3 remain separate imported study collections.
+- Each selected theme session includes all words in that task.
+- An earlier imported `Thema 2 - Nieuwe woorden` collection is merged into B2 automatically while retaining its progress.
+
 Mijn Woorden is een eenvoudige, offline woordenschattrainer voor Nederlands op B1- en B2-niveau. De app bevat 200 starterwoorden en bewaart de oefenvoortgang alleen op het apparaat.
 
 ## Wat werkt in deze versie
@@ -33,6 +46,6 @@ De map moet eerst via HTTPS op een website worden geplaatst. Open die URL daarna
 
 De ingebouwde lijst staat in `vocabulary.js`. Eigen woorden die via het scherm **Toevoegen** worden geïmporteerd, worden lokaal op het apparaat bewaard. Een volledig CSV-bestand kan aparte lijsten, woordsoorten, voorbeelden, meervouden en werkwoordsvormen bevatten. Gebruik hiervoor deze kolommen:
 
-`collection;level;category;type;dutch;english;persian;example;plural;presentIk;presentHij;pastSingular;pastPlural;participle;auxiliary`
+`collection;level;category;type;dutch;english;persian;pronunciation;stress;example;plural;presentIk;presentHij;pastSingular;pastPlural;participle;auxiliary`
 
 Een volgende versie kan een uitgebreid importschema toevoegen voor LINK+, inclusief werkwoordsvormen, thema's en taken.
