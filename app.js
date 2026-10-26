@@ -189,16 +189,16 @@ function renderPractice() {
       <div class="practice-meta"><span>${practice.index + 1} van ${practice.words.length}</span><span>${word.level} · ${escapeHtml(word.category)}</span></div>
       <div class="progress-track"><div class="progress-fill" style="width:${percentage}%"></div></div>
       <article class="flashcard">
-        <div class="prompt">${escapeHtml(isVerbMode ? prompt.label : 'Wat betekent dit?')}</div>
+        <div class="prompt">${escapeHtml(isVerbMode ? prompt.label : 'Lees de zin. Wat betekent het woord?')}</div>
         <div class="word">${escapeHtml(word.dutch)}</div>
         ${(word.pronunciation || word.stress) ? `<div class="pronunciation">${word.pronunciation ? `<span><strong>IPA:</strong> ${escapeHtml(word.pronunciation)}</span>` : ''}${word.stress ? `<span><strong>Klemtoon:</strong> ${escapeHtml(word.stress)}</span>` : ''}</div>` : ''}
+        ${word.example ? `<div class="example example-front">${escapeHtml(word.example)}</div>` : ''}
         ${!practice.revealed ? `<div class="hint">Denk eerst na en toon daarna het antwoord.</div><button id="reveal" class="reveal-button">Toon het antwoord</button>` : `
           <div class="answer">
             <div class="translation">${escapeHtml(mainAnswer)}</div>
             ${!isVerbMode ? `<div class="translation persian" lang="fa">${escapeHtml(word.persian)}</div>` : ''}
             ${word.type === 'noun' ? `<div class="forms"><strong>Meervoud:</strong> ${escapeHtml(word.plural)}</div>` : ''}
             ${word.type === 'verb' ? verbForms(word) : ''}
-            <div class="example">${escapeHtml(word.example)}</div>
           </div>`}
       </article>
       ${practice.revealed ? `<div class="rating-row"><button class="rating again" data-rating="0">Opnieuw</button><button class="rating hard" data-rating="1">Moeilijk</button><button class="rating good" data-rating="2">Goed</button></div>` : ''}

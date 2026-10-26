@@ -13,6 +13,12 @@
 - Each selected theme session includes all words in that task.
 - An earlier imported `Thema 2 - Nieuwe woorden` collection is merged into B2 automatically while retaining its progress.
 
+## Version 5 update
+
+- The example sentence is now shown on the front of each flashcard.
+- Learners can first infer the new word from its sentence and then reveal the meaning and forms.
+- Thema 3 Taak 1, Taak 2 and Taak 3 are available as separate structured import collections.
+
 Mijn Woorden is een eenvoudige, offline woordenschattrainer voor Nederlands op B1- en B2-niveau. De app bevat 200 starterwoorden en bewaart de oefenvoortgang alleen op het apparaat.
 
 ## Wat werkt in deze versie

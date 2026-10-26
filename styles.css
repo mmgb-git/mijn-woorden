@@ -76,6 +76,7 @@ p { color: var(--muted); line-height: 1.55; }
 .persian { direction:rtl; font-family:Tahoma, Arial, sans-serif; }
 .forms { margin:16px auto 0; text-align:left; max-width:430px; background:#f6f8f9; border-radius:14px; padding:13px 15px; font-size:.9rem; line-height:1.65; }
 .example { margin-top:15px; font-style:italic; color:var(--blue); }
+.example-front { margin:2px auto 18px; max-width:470px; padding:13px 15px; border-radius:14px; background:#eef5f9; line-height:1.55; }
 .reveal-button { margin-top:24px; width:100%; border:0; border-radius:14px; padding:14px; color:white; background:var(--blue-2); font-weight:800; }
 .rating-row { display:grid; grid-template-columns:repeat(3,1fr); gap:9px; margin-top:14px; }
 .rating { border:0; border-radius:13px; padding:13px 8px; font-weight:800; }
