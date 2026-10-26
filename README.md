@@ -19,6 +19,11 @@
 - Learners can first infer the new word from its sentence and then reveal the meaning and forms.
 - Thema 3 Taak 1, Taak 2 and Taak 3 are available as separate structured import collections.
 
+## Version 5.1 update
+
+- Re-importing a CSV now updates matching words instead of skipping them.
+- Existing word IDs are retained, so study progress is preserved while damaged translations are repaired.
+
 Mijn Woorden is een eenvoudige, offline woordenschattrainer voor Nederlands op B1- en B2-niveau. De app bevat 200 starterwoorden en bewaart de oefenvoortgang alleen op het apparaat.
 
 ## Wat werkt in deze versie

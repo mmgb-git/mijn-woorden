@@ -307,11 +307,22 @@ async function importCsvFile() {
     presentIk: row.presentIk || '', presentHij: row.presentHij || '', pastSingular: row.pastSingular || '', pastPlural: row.pastPlural || '',
     participle: row.participle || '', auxiliary: row.auxiliary || ''
   }));
-  const existing = new Set(customWords.map(word => `${word.collection || word.category}|${word.dutch}`.toLocaleLowerCase('nl')));
-  const added = parsed.filter(word => !existing.has(`${word.collection}|${word.dutch}`.toLocaleLowerCase('nl')));
-  customWords.push(...added); saveCustom();
-  app.querySelector('#importMessage').innerHTML = `<div class="notice">${added.length} woorden toegevoegd${parsed.length !== added.length ? ` · ${parsed.length - added.length} al aanwezig` : ''}.</div>`;
-  if (added.length) app.querySelector('#importFile').value = '';
+  const existing = new Map(customWords.map((word, index) => [`${word.collection || word.category}|${word.dutch}`.toLocaleLowerCase('nl'), index]));
+  let added = 0; let updated = 0;
+  parsed.forEach(word => {
+    const key = `${word.collection}|${word.dutch}`.toLocaleLowerCase('nl');
+    const existingIndex = existing.get(key);
+    if (existingIndex === undefined) {
+      customWords.push(word); existing.set(key, customWords.length - 1); added += 1;
+    } else {
+      const current = customWords[existingIndex];
+      customWords[existingIndex] = { ...word, id: current.id };
+      updated += 1;
+    }
+  });
+  saveCustom();
+  app.querySelector('#importMessage').innerHTML = `<div class="notice">${added} woorden toegevoegd · ${updated} bestaande woorden bijgewerkt.</div>`;
+  if (parsed.length) app.querySelector('#importFile').value = '';
 }
 
 function importWords() {
