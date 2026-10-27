@@ -24,6 +24,12 @@
 - Re-importing a CSV now updates matching words instead of skipping them.
 - Existing word IDs are retained, so study progress is preserved while damaged translations are repaired.
 
+## Version 5.2 update
+
+- Thema 3 Persian translations are repaired automatically when the app starts.
+- The repair data is stored in an encoding-safe form, so CSV or spreadsheet character encoding cannot change it.
+- The home screen shows the active app version.
+
 Mijn Woorden is een eenvoudige, offline woordenschattrainer voor Nederlands op B1- en B2-niveau. De app bevat 200 starterwoorden en bewaart de oefenvoortgang alleen op het apparaat.
 
 ## Wat werkt in deze versie
